@@ -13,11 +13,13 @@ import javax.swing.JFrame;
 public class Game extends Canvas implements Runnable, KeyListener{
 	public static int Width = 480, Height = 480;
 	public Player player;
+	public World world;
 	
 	public Game() {
 		this.addKeyListener(this);
 		this.setPreferredSize(new Dimension(Width, Height));
-		player = new Player(0, 0);
+		player = new Player(32, 32);
+		world = new World();
 	}
 	
 	@Override
@@ -52,6 +54,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		
 		
 		player.render(g);
+		world.render(g);
 		
 		bs.show();
 	}
