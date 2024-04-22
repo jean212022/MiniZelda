@@ -4,36 +4,42 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class Player extends Rectangle {
+public class Inimigo extends Rectangle {
 	
-	public int spd = 4, curnAnimation = 0, curnFrames = 0, targetFrames = 15, dir = 1;
-	public boolean right, left, up, down, shoot = false;
+	public int spd = 2, curnAnimation = 0, curnFrames = 0, targetFrames = 15, dir = 1;
+	public int right = 1, left = 0, up = 0, down = 0;
+	boolean shoot = false;
 	public static List<Bullet> bullets = new ArrayList<>();
 	
-	public Player(int x, int y) {
+	public Inimigo(int x, int y) {
 		super(x, y, 32, 32);
 	}
 	
-	public void tick() {
-		boolean moved = false;
-		if(right && World.isFree(x+spd, y)) {
-			x+=spd;
-			dir = 1;
-			moved = true;
-		} else if(left && World.isFree(x-spd, y)) {
-			x -= spd;
-			dir = -1;
-			moved = true;
+	public void perseguirPlayer() {
+		Player p = Game.player;
+		if(x < p.x && World.isFree(x+spd, y)) {
+			if(new Random().nextInt(100) < 50)
+				x += spd;
+		} else if (x > p.x && World.isFree(x-spd, y)) {
+			if(new Random().nextInt(100) < 50)
+				x -= spd;
 		}
 		
-		if(up && World.isFree(x, y-spd)) {
-			y -= spd;
-			moved = true;
-		} else if (down && World.isFree(x, y+spd)) {
-			y += spd;
-			moved = true;
+		if(y < p.y && World.isFree(x, y+spd)) {
+			if(new Random().nextInt(100) < 50)
+				y += spd;
+		} else if(y > p.y && World.isFree(x, y-spd)) {
+			if(new Random().nextInt(100) < 50)
+				y -= spd;
 		}
+	}
+	
+	public void tick() {
+		boolean moved = true;
+		
+		perseguirPlayer();
 		
 		if(moved) {
 			this.curnFrames++;
